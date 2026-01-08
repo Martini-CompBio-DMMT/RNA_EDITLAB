@@ -1,29 +1,33 @@
-PROJECT: "GSE102556"
+PROJECT: "NAME" #project name, results will be saved in results_<NAME>
 
-known: "/mnt/resources/editing/REDIportal/human/knownEditingSites_hg38.txt.gz"
+# Input:
+#fastq sample name (without _1/2.fq.gz or _1/2.fastq.gz ...): new name to assign
+samples:
+  fastq_S1: Sample1
+  fastq_S2: Sample2
+
+path: "/mnt/datasets/sra/GSE102556-famale-and-male-MDD/human"
+
+
+#### Reference files ####
+# Specify location of known editing sites, reference genemo and REDIscript executable
+known: "/mnt/resources/editing/REDIportal/human/knownEditingSites_hg38.txt.gz" 
 reference: "/mnt/resources/genome/human/hg38/Homo_sapiens.GRCh38.dna.primary_assembly.fa"
 REDIscript: "/mnt/resources/RNA_editLab/workflow/scripts/run_reditools.sh"
 
-# Alignment
+#### Alignment ####
+# Specify location of star aligner indexes and star_alignment_reditools scriopt
 star_index: "/mnt/resources/indexes/star/human/hg38_l99"
 STAR_REDI: "/mnt/resources/RNA_editLab/workflow/scripts/star_alignment_reditools.sh"
 
-# a2i
-RNAEI: "/mnt/resources/RNA_editLab/workflow/scripts/RNAEditingIndexer/RNAEditingIndex" # soft link
-resource_dir: "/mnt/resources/RNA_editLab/workflow/scripts/RNAEditingIndexer/Resources/" # soft link
+#### a2i ####
+RNAEI: "/mnt/resources/RNA_editLab/workflow/scripts/RNAEditingIndexer/RNAEditingIndex"
+resource_dir: "/mnt/resources/RNA_editLab/workflow/scripts/RNAEditingIndexer/Resources/"
 CPUS: 8
 
-# Salmon quantification
+#### Salmon quantification ####
 tr_idx: "/mnt/resources/indexes/salmon/human-tr106"
 CPU: 5
 libtype: A # three parts: 1) I=inwars O=outward M=Matching; 
           # 2) S=Stranded U=unstranded; 
           # 3) (only if stranded) F=forward R=Reverse A = automatic
-
-# Input:
-
-samples:
-  SRR5961796: GSM2740605 #fastq sample name (without _1/2.fq.gz or _1/2.fastq.gz ...): new name to assign
-  SRR5961803: GSM2740612
-
-path: "/mnt/datasets/sra/GSE102556-famale-and-male-MDD/human"
