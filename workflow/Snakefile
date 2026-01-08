@@ -1,0 +1,64 @@
+configfile: "config/config.yml"
+
+# Input-output correspondence
+BASE_PATH = config["path"]
+
+# 1. Determine all final, desired output names
+OUTPUT_NAMES = list(config["samples"].values()) 
+
+# 2. Create the inverse map: sample_id -> input_sample
+# {'T4_Sample_Primary': 'patientX_A', ... }
+INVERSE_MAP = {v: k for k, v in config["samples"].items()}
+
+# 3. Define all possible input suffixes
+ALLOWED_R1_SUFFIXES = ["_R1.fastq.gz", "_1.fastq.gz", "_1.fq.gz"]
+ALLOWED_R2_SUFFIXES = ["_R2.fastq.gz", "_2.fastq.gz", "_2.fq.gz"]
+
+def get_input_sample(wildcards):
+    """Returns the original input prefix (e.g., 'patientX_A')"""
+    return INVERSE_MAP[wildcards.sample_id]
+
+def find_exact_input_paths(wildcards):
+    """
+    Finds the exact paths for both R1 and R2 files based on allowed suffixes.
+    Returns a list: [path_to_R1, path_to_R2]
+    """
+    sample_prefix = get_input_sample(wildcards) # e.g., 'patientX_A'
+    
+    found_r1 = None
+    found_r2 = None
+
+    # Search for R1 (Forward) file
+    for suffix in ALLOWED_R1_SUFFIXES:
+        potential_path = f"{BASE_PATH}/{sample_prefix}{suffix}"
+        if os.path.exists(potential_path):
+            found_r1 = potential_path
+            break
+            
+    # Search for R2 (Reverse) file
+    for suffix in ALLOWED_R2_SUFFIXES:
+        potential_path = f"{BASE_PATH}/{sample_prefix}{suffix}"
+        if os.path.exists(potential_path):
+            found_r2 = potential_path
+            break
+            
+    # Check if both were found
+    if found_r1 and found_r2:
+        return [found_r1, found_r2]
+    
+    # If one or both are missing, raise an informative error
+    if not found_r1:
+        raise FileNotFoundError(f"Missing R1 file for sample '{sample_prefix}' in '{BASE_PATH}'.")
+    if not found_r2:
+        raise FileNotFoundError(f"Missing R2 file for sample '{sample_prefix}' in '{BASE_PATH}'.")
+
+rule all:
+    input:
+        #expand("results_{proj}/alignment/{sample_id}_Aligned.sortedByCoord.out.bam", proj= config["PROJECT"],sample_id=OUTPUT_NAMES),
+        expand("results_{proj}/editing_quantification/{sample_id}_Aligned.sortedByCoord.out", proj= config["PROJECT"], sample_id=OUTPUT_NAMES),
+        expand("results_{proj}/aluEditingIndex/summary_dir", proj= config["PROJECT"]),
+        expand("results_{proj}/salmon_quantification/{sample_id}", proj= config["PROJECT"], sample_id=OUTPUT_NAMES)
+
+include: "rules/pipeline.smk"
+include: "rules/run_a2i.smk"
+include: "rules/salmon-pipeline.smk"
