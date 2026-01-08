@@ -11,7 +11,7 @@ rule STAR:
         """
         workdir=$PWD
         mkdir -p {params.dir} && cd {params.dir}
-        {params.star_redi} {params.index} $workdir/{input[0]} $workdir/{input[1]} {wildcards.sample_id}
+        {params.star_redi} {params.index} {input[0]} {input[1]} {wildcards.sample_id}
         """
 
 rule REDIscript:
