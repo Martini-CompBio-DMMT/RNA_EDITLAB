@@ -2,8 +2,13 @@
 This pipeline provides a structured workflow for identifying RNA editing sites from sequencing data. It leverages Snakemake for reproducibility and Conda for automated software management.
 
 ## 1. Installation
-It is recommended to install Snakemake within a dedicated Conda environment to avoid dependency conflicts.
 
+Download the repository 
+```bash
+wget https://github.com/Martini-CompBio-DMMT/RNA_EDITLAB/archive/refs/heads/main.zip
+```
+
+It is recommended to install **Snakemake** within a dedicated Conda environment to avoid dependency conflicts.
 ```bash
 # Create a new environment and install Snakemake
 conda create -n snakemake_env -c bioconda -c conda-forge snakemake=9.11.3
