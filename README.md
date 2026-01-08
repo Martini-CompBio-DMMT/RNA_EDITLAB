@@ -1,4 +1,4 @@
-#RNA editing Snakemake pipeline.
+# RNA editing Snakemake pipeline.
 
 To run copy the config in your work directory and modify with required parameters. 
 
