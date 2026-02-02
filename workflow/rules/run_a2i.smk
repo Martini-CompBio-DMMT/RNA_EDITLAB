@@ -9,10 +9,10 @@ rule rehead_bams:
     shell:
         """
         mkdir -p {params.dir}
-        samtools view -H {input} >/tmp/header && \
-        sed -r 's/SN:/SN:chr/' </tmp/header \
-        | sed -r 's/SN:chrMT/SN:chrM/' >/tmp/header_new && \
-        samtools reheader -P /tmp/header_new {input} >{output.bam} && samtools index {output.bam}
+        samtools view -H {input} >/tmp/header_{wildcards.sample_id} && \
+        sed -r 's/SN:/SN:chr/' </tmp/header_{wildcards.sample_id} \
+        | sed -r 's/SN:chrMT/SN:chrM/' >/tmp/header_new_{wildcards.sample_id} && \
+        samtools reheader -P /tmp/header_new_{wildcards.sample_id} {input} >{output.bam} && samtools index {output.bam}
         """
 
 rule RNAEI:

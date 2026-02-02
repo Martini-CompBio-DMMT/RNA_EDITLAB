@@ -30,5 +30,6 @@ rule REDIscript:
         """
         workdir=$PWD
         mkdir -p {params.dir} && cd {params.dir}
+        rm -f {input}.bai
         bash {params.REDIscript} $workdir/{input} {params.reference} {params.known} {threads}
         """
