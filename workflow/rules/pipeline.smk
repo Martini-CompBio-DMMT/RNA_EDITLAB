@@ -6,12 +6,15 @@ rule STAR:
     params:
         index=config["star_index"],
         star_redi=config["STAR_REDI"],
-        dir="results_{proj}/alignment/"
+        dir="results_{proj}/alignment/",
+        # If single end, pass empty quotes for the second file argument
+        r2=lambda wildcards, input: input[1] if len(input) == 2 else ""
+    threads: config["CPU"]
     shell: 
         """
         workdir=$PWD
         mkdir -p {params.dir} && cd {params.dir}
-        {params.star_redi} {params.index} {input[0]} {input[1]} {wildcards.sample_id}
+        {params.star_redi} {params.index} {input[0]} "{params.r2}" {wildcards.sample_id} {threads}
         """
 
 rule REDIscript:

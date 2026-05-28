@@ -6,9 +6,9 @@ export genomeIndexDir=$1
 export fastq1=$2
 export fastq2=$3
 export sample=$4
+export threads=$5
 
-
-STAR --runThreadN 8 \
+STAR --runThreadN $threads \
 --genomeDir $genomeIndexDir \
 --genomeLoad NoSharedMemory \
 --outFileNamePrefix ${sample}_ \

@@ -1,7 +1,7 @@
 PROJECT: "NAME" #project name, results will be saved in results_<NAME>
 
 # Input:
-#fastq sample name (without _1/2.fq.gz or _1/2.fastq.gz ...): new name to assign
+#fastq sample name (without _1/2.fq.gz or _1/2.fastq.gz or .fq/.fastq.gz (for single-end) ...): new name to assign
 samples:
   fastq_S1: Sample1
   fastq_S2: Sample2

@@ -11,7 +11,7 @@ OUTPUT_NAMES = list(config["samples"].values())
 INVERSE_MAP = {v: k for k, v in config["samples"].items()}
 
 # 3. Define all possible input suffixes
-ALLOWED_R1_SUFFIXES = ["_R1.fastq.gz", "_1.fastq.gz", "_1.fq.gz"]
+ALLOWED_R1_SUFFIXES = ["_R1.fastq.gz", "_1.fastq.gz", "_1.fq.gz",".fq.gz",".fastq.gz"]
 ALLOWED_R2_SUFFIXES = ["_R2.fastq.gz", "_2.fastq.gz", "_2.fq.gz"]
 
 def get_input_sample(wildcards):
@@ -50,7 +50,8 @@ def find_exact_input_paths(wildcards):
     if not found_r1:
         raise FileNotFoundError(f"Missing R1 file for sample '{sample_prefix}' in '{BASE_PATH}'.")
     if not found_r2:
-        raise FileNotFoundError(f"Missing R2 file for sample '{sample_prefix}' in '{BASE_PATH}'.")
+        print(f"Missing R2 file for sample '{sample_prefix}' in '{BASE_PATH}'. Treating as single-end data.")
+        return [found_r1]  # Return only R1 for single-end processing
 
 rule all:
     input:
